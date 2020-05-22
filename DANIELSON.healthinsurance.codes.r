@@ -1,0 +1,20 @@
+modelT <- lm(charges~children+isSmoker+age+bmi, insurance)
+summary(modelT)
+confint(modelT)
+plot(modelT$residuals)
+cbind( modelT$coefficients, confint(modelT))
+jarque.bera.test(modelT$residuals)
+
+x <- mean(insurance$charges)
+chargebin <- ifelse(insurance$charges >= x, 1, 0)
+View(chargebin)
+LM6 <- glm(chargebin~children+isSmoker+age+bmi, insurance, family="binomial") 
+summary(LM6)
+
+LM7 <- glm(chargebin~isSmoker+age, insurance, family="binomial")
+summary(LM7)
+
+signal <- predict(LM7, insurance)
+pred_prob <- (1/(1 + exp(-signal)))
+View(pred_prob)
+confint(LM7)
